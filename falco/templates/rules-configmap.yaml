@@ -1,0 +1,15 @@
+{{- if .Values.customRules.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "falco.fullname" . }}-rules
+  namespace: {{ include "falco.namespace" . }}
+  labels:
+    {{- include "falco.labels" . | nindent 4 }}
+data:
+  {{- $files := .Files }}
+  custom-rule.yaml: |-
+    {{ $files.Get "custom-rule.yaml" | nindent 4 }}
+  k8s-custom-rules.yaml: |-
+    {{ $files.Get "k8s-rule.yaml" | nindent 4 }}
+{{- end }}
